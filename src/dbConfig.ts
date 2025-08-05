@@ -3,7 +3,7 @@ import { PropertyEntity } from "./entities/property.entity";
 
 export const pgConfig: PostgresConnectionOptions = {
   //do not put this here, inserted env file
-  url: "postgresql://neondb_owner:npg_hLI1AU8zQjwp@ep-rough-forest-aerrhmis-pooler.c-2.us-east-2.aws.neon.tech/nestJsDb?sslmode=require&channel_binding=require",
+  url: "postgresql://neondb_owner:npg_V7KHuFgo8WIk@ep-summer-rain-afpu0455-pooler.c-2.us-west-2.aws.neon.tech/nestJs_db?sslmode=require&channel_binding=require",
   type: "postgres",
   port: 3306,
   entities: [__dirname + "/**/*.entity{.ts,.js}"],

@@ -4,7 +4,14 @@ import {
   UpdateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
+import { PropertyFeatureEntity } from "./propertyFeature.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity({ name: "properties" })
 export class PropertyEntity {
@@ -36,6 +43,16 @@ export class PropertyEntity {
   })
   updated_at: Date;
 
-  @Column({ default: 0 })
   updated_by: number;
+
+  @OneToOne(() => PropertyFeatureEntity, (features) => features.property)
+  @JoinColumn({ name: "property_feature_id" })
+  propertyFeatures: PropertyFeatureEntity
+
+  @ManyToOne(() => UserEntity, (user) => user.properties)
+  @JoinColumn({ name: "ownerId" })
+  user: UserEntity
+
+  @ManyToMany(() => UserEntity, (user) => user.likedProperties)
+  likedBy: UserEntity[];
 }
