@@ -7,7 +7,7 @@ export class PropertyFeatureEntity {
   id: number;
 
   @Column()
-  bedrooms: number;
+  area: number;
 
   @Column()
   bathrooms: number;

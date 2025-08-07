@@ -12,6 +12,7 @@ import {
 } from "typeorm";
 import { PropertyFeatureEntity } from "./propertyFeature.entity";
 import { UserEntity } from "./user.entity";
+import { PropertyTypeEntity } from "./propertyType.entity";
 
 @Entity({ name: "properties" })
 export class PropertyEntity {
@@ -24,7 +25,7 @@ export class PropertyEntity {
   @Column()
   description: string;
 
-  @Column({ default: 0 })
+  @Column({ type: 'float' })
   price: number;
 
   @CreateDateColumn({
@@ -55,4 +56,7 @@ export class PropertyEntity {
 
   @ManyToMany(() => UserEntity, (user) => user.likedProperties)
   likedBy: UserEntity[];
+
+  @ManyToOne(() => PropertyTypeEntity)
+  type: PropertyTypeEntity;
 }
