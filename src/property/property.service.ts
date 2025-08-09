@@ -11,13 +11,15 @@ import { Repository } from "typeorm";
 import { CreatePropertyDto } from "./dto/createProperty.dto";
 import { CreatePropertyZodDto } from "./dto/createPropertyZod.dto";
 import { UpdatePropertyDto } from "./dto/updateProperty.dto";
+import { PaginationDto } from "./dto/pagination.dto";
+import { DEFAULT_PAGE_SIZE } from "src/utils/constants";
 
 @Injectable()
 export class PropertyService {
   constructor(
     @InjectRepository(PropertyEntity)
     private propertyRepo: Repository<PropertyEntity>,
-  ) {}
+  ) { }
 
   async findOne(id: number) {
     try {
@@ -28,9 +30,12 @@ export class PropertyService {
       console.log(error);
     }
   }
-  async findAll() {
+  async findAll(query: PaginationDto) {
     try {
-      return await this.propertyRepo.find();
+      return await this.propertyRepo.find({
+        skip: query.skip,
+        take: query.limit ?? DEFAULT_PAGE_SIZE,
+      });
     } catch (error) {
       console.log(error);
     }

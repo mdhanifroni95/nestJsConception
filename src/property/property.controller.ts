@@ -24,13 +24,14 @@ import { RequestHeaders } from "./pipes/request-headers";
 import { HeadersDto } from "./dto/headers.dto";
 import { PropertyService } from "./property.service";
 import { UpdatePropertyDto } from "./dto/updateProperty.dto";
+import { PaginationDto } from "./dto/pagination.dto";
 
 @Controller("property")
 export class PropertyController {
-  constructor(private propertyService: PropertyService) {}
+  constructor(private propertyService: PropertyService) { }
   @Get()
-  findAll() {
-    return this.propertyService.findAll();
+  findAll(@Query() query: PaginationDto) {
+    return this.propertyService.findAll(query);
   }
 
   @Get(":id")
@@ -67,10 +68,10 @@ export class PropertyController {
     @Body() // new ValidationPipe({
     //   forbidNonWhitelisted: true,
     body //   whitelist: true,J
-    //   groups: ["update"],
-    //   always: true,
-    // }),
-    : UpdatePropertyDto,
+      //   groups: ["update"],
+      //   always: true,
+      // }),
+      : UpdatePropertyDto,
     // @RequestHeaders(
     //   new ValidationPipe({ whitelist: true, validateCustomDecorators: true }),
     // )
