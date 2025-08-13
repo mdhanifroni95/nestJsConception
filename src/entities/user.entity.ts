@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { string } from "zod";
 import { PropertyEntity } from "./property.entity";
 import { join } from "path";
+import * as bcrypt from "bcrypt";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -17,19 +18,22 @@ export class UserEntity {
     @Column({ unique: true })
     email: string;
 
-    @Column()
+    @Column({ default: '' })
+    password: string;
+
+    @Column({ default: '' })
     avatarUrl: string;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     createdAt: Date;
 
-    @Column()
+    @Column({ default: 0 })
     createdBy: number;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     updatedAt: Date;
 
-    @Column()
+    @Column({ default: 0 })
     updatedBy: number;
 
     @OneToMany(() => PropertyEntity, (property) => property.user)
@@ -39,4 +43,8 @@ export class UserEntity {
     @JoinTable({ name: "user_liked_properties" })
     likedProperties: PropertyEntity[];
 
+    @BeforeInsert()
+    async hashPassword() {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
 }
