@@ -1,14 +1,17 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { UserService } from 'src/user/user.service';
 import { AuthJwtPayload } from './types/auth-jwtPayload';
+import refreshJwtConfig from './config/refresh-jwt.config';
+import { ConfigType } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private userService: UserService,
-		private jtwService: JwtService
+		private jtwService: JwtService,
+		@Inject(refreshJwtConfig.KEY) private refreshTokenJwtConfig: ConfigType<typeof refreshJwtConfig>
 	) { }
 
 	async validateUser(email: string, password: string) {
@@ -22,6 +25,14 @@ export class AuthService {
 
 	login(userId: number) {
 		const payload: AuthJwtPayload = { sub: userId }
-		return this.jtwService.sign(payload)
+		const token = this.jtwService.sign(payload);
+		const refreshToken = this.jtwService.sign(payload, this.refreshTokenJwtConfig);
+		return { id: userId, token, refreshToken }
+	}
+
+	refreshToken(userId: number) {
+		const payload: AuthJwtPayload = { sub: userId }
+		const token = this.jtwService.sign(payload);
+		return { id: userId, token }
 	}
 }
