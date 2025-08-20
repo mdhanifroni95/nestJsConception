@@ -21,6 +21,9 @@ export class UserEntity {
     @Column({ default: '' })
     password: string;
 
+    @Column({ nullable: true })
+    hashedRefreshToken: string;
+
     @Column({ default: '' })
     avatarUrl: string;
 
