@@ -28,7 +28,7 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    return await this.userRepo.findOne({ where: { id }, select: ['firstName', 'lastName', 'avatarUrl', 'hashedRefreshToken'] });
+    return await this.userRepo.findOne({ where: { id }, select: ['id', 'firstName', 'lastName', 'avatarUrl', 'hashedRefreshToken', 'role'] });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

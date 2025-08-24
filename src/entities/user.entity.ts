@@ -3,6 +3,7 @@ import { string } from "zod";
 import { PropertyEntity } from "./property.entity";
 import { join } from "path";
 import * as bcrypt from "bcrypt";
+import { Role } from "src/auth/enums/role.enum";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -20,6 +21,9 @@ export class UserEntity {
 
     @Column({ default: '' })
     password: string;
+
+    @Column({ type: 'enum', enum: Role, default: Role.USER })
+    role: Role
 
     @Column({ nullable: true })
     hashedRefreshToken: string;
