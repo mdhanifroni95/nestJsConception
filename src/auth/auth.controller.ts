@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Post, Req, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Post, Req, Request, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth/refresh-auth.guard';
@@ -38,7 +38,9 @@ export class AuthController {
   @Public()
   @UseGuards(GoogleAuthGuard)
   @Get("google/callback")
-  googleCallBack(@Req() req) {
-    const response = this.authService.login(req.user.id)
+  async googleCallBack(@Req() req, @Res() res) {
+    const response = await this.authService.login(req.user.id)
+
+    res.redirect(`http://localhost:3000?token=${response.accessToken}`)
   }
 }

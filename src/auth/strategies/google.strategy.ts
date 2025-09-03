@@ -1,9 +1,10 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, VerifyCallback, StrategyOptions } from "passport-google-oauth20";
 import googleOauthConfig from "../config/google-oauth.config";
 import { ConfigType } from "@nestjs/config";
 import { AuthService } from "../auth.service";
+import { use } from "passport";
 
 
 @Injectable()
@@ -30,6 +31,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       avatarUrl: photos[0]?.value,
       password: ""
     });
+    console.log('Validated user:', user); // Log the user for debugging
+    if (!user) {
+      return done(new UnauthorizedException('User not found'), false);
+    }
     done(null, user);
   }
 }
